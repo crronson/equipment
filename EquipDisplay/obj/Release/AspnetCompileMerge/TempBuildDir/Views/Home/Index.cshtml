@@ -1,0 +1,262 @@
+﻿@model IEnumerable<EquipDisplay.Models.Display>
+@{
+    ViewBag.Title = "Equipment Display";
+}
+<br />
+<br />
+<br />
+
+@if (!Model.Any())
+{
+    <text>There's no Equipment to Display!</text>
+
+}
+
+else
+{
+    <div id="div1" class="targetDiv">
+        <hr />
+        <table id="lstdisplay" class="table table-hover">
+
+            <thead>
+                <tr>
+                    <th scope="col">Meter Reading</th>
+                    <th scope="col">External ID</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+
+
+
+            @foreach (var equipment in Model)
+            {
+
+                <tr>
+                    <td>@equipment.MeterReading</td>
+                    @*<td>@equipment.ExternalId</td>*@
+                    <td>@Html.ActionLink(@equipment.ExternalId, "DisplayEquipment", "Home", new { ID = equipment.ID }, null)</td>
+                    <td>@equipment.Description</td>
+                </tr>
+
+            }
+
+
+        </table>
+        <hr />
+    </div>
+
+
+
+
+
+
+    <div id="div2" class="targetDiv">
+
+        <br />
+
+        <h1>Scenario</h1>
+        <hr />
+        <br />
+
+        <p>
+            A JSON file consisting two arrays is given. The objective is to create a a list that displays a combination of properties form both arrays
+            and provide funcitonality to search.
+        </p>
+
+        <hr />
+        <h3>Business Logic</h3>
+        <p>
+            Using <strong>code-first approach</strong> I've created a model for each arrays, a model tha represents the JSON file itself and a Display View Model
+            to represent the list to user. The View Model is the ExternalId and MeterReading from the SerialisedEquipment model and the Description from the
+            EquipmentType model where the ID of the EquipmentType is the same with the EquipmentTypeId of SerialisedEquipment.
+        </p>
+        <hr />
+        <h3>Edit/Add/Populate</h3>
+        <p>
+            Using ApplicationDBcontext end user is able to edit/add/delete a selected item from the list. To do so navigate from Home View to:
+            <ul>
+                <li>Select an equipment from the Home View</li>
+                <li>The Equipment Information View should be displayed not</li>
+                <li>Edit the item</li>
+                <li>Click the Edit button bellow the equipment's information</li>
+            </ul>
+            The end user is able to edit the MeterReading and the Description. The ExternalID is the unique id of the SerialisedEquipment and can not
+            be changed by end users. <strong>Altering the model</strong> is done only by altering the JSON file.
+        </p>
+        <p>
+            Web 2 APIs
+        </p>
+        <p>
+            <strong>However</strong> for references functionality to populate models is added but not provided to end user. This is done using
+            ApplicationDBcontext.
+        </p>
+        <hr />
+        <h3>Searching</h3>
+        <p>
+            <strong>The DataTables</strong> JavScript library is been used for searching, paginations and sorting. It is installed through Nuget
+            Package Manager and it is passed into BundleConfig along with its "css".
+        </p>
+        <p>
+            <strong>Additionally</strong> A <i>Seach</i> Action is been provided to query the database using .NET Framework. Seach can be found if navigate
+            from Home View:
+            <ul>
+                <li>Click an Entry: That takes user to Equipment Information.</li>
+                <li>Select Search button from the bottom of the page</li>
+                <li>Enter an ExternalId - this is the Serialised ExternalId</li>
+            </ul>
+            I placed it inside the Equipment Information to distinct form the jdatatable's search.
+        </p>
+        <hr />
+        <h3>Web API</h3>
+        <p>
+            <strong>AutoMapper</strong> is used to map the Models with its DTOs for providing API functionality. Get the Display Model, specific item
+            from API by either database ID or string ExternalId, delete and update has been implemented.
+
+            APIs are provided by:
+            <ul>
+                <li>api/displays/</li>
+                <li>api/displays/1 for databases</li>
+                <li>Api/Displays/GetDisplays/{ExternalId} for external ids in string format</li>
+            </ul>
+
+            <strong><i>Please Note all APIS for add/delete/update are disabled by default.</i></strong>
+        </p>
+        <hr />
+        <h3>Additionally</h3>
+        <p>
+            Functionality to generate id in the alphanumeric format 8 digita - 4 digits - 4 digits - 4 digits - 8 digits is been provided for generating
+            EquipmentType's ID and SerialisedEquipment's Id and EquipmentTypeId for populating the Model objects from user side.
+        </p>
+        <p>
+            Functionality to generate the unique properties of EquipmentType and SerialisedEquipment is provided by generating the current date and time
+            in Epoch format.
+        </p>
+        <hr />
+
+    </div>
+
+
+
+    <div div id="div3" class="targetDiv">
+
+        <br />
+        <h1>In a Nutshell</h1>
+        <hr />
+        <p>
+            <strong>Code-first approach.</strong> I created the models to represent the arrays from the JSON file and the View Model named Display.
+        </p>
+        <p>
+            <strong>Register DBSet</strong> Models to the IdentityModels.
+        </p>
+        <p>
+            <strong>Enable-migration</strong> and update-database is been used to populate the database and feed with data from the JSON file.
+        </p>
+        <p>
+            I used <strong>Newtosoft.json</strong> library to extract the data from the JSon and parsed them to the database using the
+            <strong>Seed() and AddOrUpdate()</strong> functions provided at the Configuration class of the Migrations.
+        </p>
+        <p>
+            I've created the Actions and the Views to display the queries from the database. <strong>ApplicationDBcontext</strong> and HttPost used to
+            select, add, edit and delete the objects.
+        </p>
+        <p>
+            Forms verification is done using EF. JQueryval is rendered only at the View that includes forms.
+        </p>
+        <p>
+            <strong>appSpartan.js</strong> is the JavaScript/JQuery file that provides the navigation functionality. It is rendered at the BundleConfig.cs
+            file at the App_Start
+        </p>
+        <p>
+            <strong>ApplicationDBcontext</strong> is used for querying the database.
+        </p>
+        <p>
+            Installed <strong>bootstrap</strong> to make application more friendly for mobile devices and screen-sizes.
+        </p>
+        <p>
+            Installed <strong>jquery.datatables</strong> to display the Model data as it provides excellent functionality for searching paginations
+            and sorting the entire content of the table.
+        </p>
+        <p>
+            <strong>Search</strong> is also provided using the Application DBcontext functionality. The user can search for ExternalId.
+        </p>
+        <p>
+            <strong>Edit, Add, Delete, Get</strong> Actions created with Entity Framework and Web 2 API.
+        </p>
+        <p>
+            Created functions to generate ID with JSON's format. These are not used at the moment as Business Logic suggests to populate database only by JSON
+            but provided for future references in case of change of mind. The generated format is alphanumeric with dashes:
+            8 digits - 4 digitis -4 digits - 4 digits - 8digits. This is used for EquipmentType.ID and SerialisedEquipment.ID SerialisedEquipment.EquipmentTypeId.
+        </p>
+        <p>
+            Created function to generate a unique ID to use for ExternalID. This is done by converting current date and time to <strong>Epoch</strong>. The idea
+            is based on the fact that the user can not create instantly mulpiple items using the client-side. Hence some seconds in worst case scenario will
+            be enough to distinct the generated numbers. Of course this assumes that only one user will be using it, but I do not expect too many :) and Epoch
+            is cool :)
+        </p>
+        <p>
+            Installed <strong>AutoMapper</strong> from Nuget Package Manager Console. Created DTOs that I mapped with the models and I've created APIs to query
+            database.
+
+            APIs are provided by:
+            <ul>
+                <li>api/displays/</li>
+                <li>api/displays/1 for databases</li>
+                <li>Api/Displays/GetDisplays/{ExternalId} for external ids in string format</li>
+            </ul>
+
+            <strong><i>Please Note all APIS for add/delete/update are disabled by default.</i></strong>
+        </p>
+
+    </div>
+
+
+    <div div id="div4" class="targetDiv">
+        <br />
+        <h1>Libraries and Addons</h1>
+        <hr />
+        <p>
+            Overall I used:
+            <ul>
+                <li>Code-First Approch</li>
+                <li>Enable-Migrations</li>
+                <li>Bootstrap</li>
+                <li>JQuery for navigation</li>
+                <li>JDatatables to display Model</li>
+                <li>Newtosoft.json to extract JSON data</li>
+                <li>AutoMapper to map DTOs with Models for APIs</li>
+            </ul>
+            <hr />
+        </p>
+
+
+    </div>
+
+    <div div id="div5" class="targetDiv">
+        <br />
+        <h1>DownLoad The Code</h1>
+        <hr />
+        <p>
+            You can download the code from this link from this link:
+
+        </p>
+        <p><a href="~/MyDownloads/EquipDisplaySLN.zip">Download The Code</a></p>
+        <hr />
+
+    </div>
+
+
+
+
+    <div class="menu">
+
+        <button type="button" class="btn navbar-btn showSingle" targetDiv="1">Display</button>
+        <button type="button" class="btn navbar-btn showSingle" targetDiv="2">Scenario</button>
+        <button type="button" class="btn navbar-btn showSingle" targetDiv="3">Howto</button>
+        <button type="button" class="btn navbar-btn showSingle" targetDiv="4">Tools</button>
+        <button type="button" class="btn navbar-btn showSingle" targetDiv="5">Download</button>
+
+    </div>
+
+
+}
+

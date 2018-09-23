@@ -1,0 +1,121 @@
+﻿@model EquipDisplay.Models.Display
+
+@{
+    ViewBag.Title = "Equipment Details";
+}
+
+<div id="div1" class="targetDiv">
+    <h1>Equipment Information</h1>
+    <hr />
+    <div>
+
+        @* Edit form *@
+
+        @using (Html.BeginForm("Edit", "Home"))
+        {
+
+            <div class="form-group">
+                @Html.LabelFor(p => p.ID)
+                @Html.TextBoxFor(p => p.ID, new { @class = "form-control is-valid", @readonly = "readonly" })
+                @Html.ValidationMessageFor(p => p.MeterReading, "", new { @class = "text-danger" })
+                <br />
+                @Html.LabelFor(p => p.MeterReading)
+                @Html.TextBoxFor(p => p.MeterReading, new { @class = "form-control is-valid" })
+                @Html.ValidationMessageFor(p => p.MeterReading, "", new { @class = "text-danger" })
+                <br />
+                @Html.LabelFor(p => p.ExternalId)
+                @Html.TextBoxFor(p => p.ExternalId, new { @class = "form-control is-valid", @readonly = "readonly" })
+                @Html.ValidationMessageFor(p => p.ExternalId, "", new { @class = "text-danger" })
+                <br />
+                @Html.LabelFor(p => p.Description)
+                @Html.TextBoxFor(p => p.Description, new { @class = "form-control is-valid" })
+                @Html.ValidationMessageFor(p => p.Description, "", new { @class = "text-danger" })
+                @* The validation message is set from the Entity Model *@
+                <br />
+
+            </div>
+            <button type="submit" class="btn navbar-btn">Edit</button>
+            
+        }
+    </div>
+
+
+</div>
+
+@*Search*@
+
+<div id="div2" class="targetDiv">
+
+    <h1>Search Equipment</h1>
+    <hr />
+
+    @using (Html.BeginForm("Search", "Home"))
+    {
+
+        <div class="form-group">
+
+            @Html.LabelFor(p => p.ExternalId)
+            @Html.TextBoxFor(p => p.ExternalId, new { @class = "form-control is-valid" })
+
+        </div>
+        <button type="submit" class="btn navbar-btn">Search</button>
+
+    }
+</div>
+
+
+@*Add*@
+<div id="div3" class="targetDiv">
+    <h1>Add Reading</h1>
+    <hr />
+
+    @using (Html.BeginForm("Add", "Home"))
+    {
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.MeterReading)
+            @Html.TextBoxFor(p => p.MeterReading, new { @class = "form-control is-valid" })
+            @Html.ValidationMessageFor(p => p.MeterReading, "", new { @class = "text-danger" })
+            <br />
+            @Html.LabelFor(p => p.ExternalId)
+            @Html.TextBoxFor(p => p.ExternalId, new { @class = "form-control is-valid" })
+            @Html.ValidationMessageFor(p => p.ExternalId, "", new { @class = "text-danger" })
+            <br />
+            @Html.LabelFor(p => p.Description)
+            @Html.TextBoxFor(p => p.Description, new { @class = "form-control is-valid" })
+            @Html.ValidationMessageFor(p => p.Description, "", new { @class = "text-danger" })
+            @* The validation message is set from the Entity Model *@
+            <hr />
+
+
+
+
+            <br />
+
+        </div>
+        <button type="submit" class="btn navbar-btn">Add</button>
+    }
+
+
+
+</div>
+
+@* Remove *@
+<div id="div4" class="targetDiv">
+    <p>Remove</p>
+</div>
+
+
+<div class="menu">
+    <br />
+    <hr />
+    <button type="button" class="btn navbar-btn showSingle" targetDiv="1">Details</button>
+    <button type="button" class="btn navbar-btn showSingle" targetDiv="2">Search</button>
+    <input type="button" class="btn navbar-btn" value="Home" onclick="location.href='@Url.Action("Index", "Home")'" />
+
+</div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
